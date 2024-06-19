@@ -65,6 +65,7 @@ expressApp.post('/reset-password', (request, response) => {
 });
 
 expressApp.get('/test', (request, response) => {
+    console.log('test');
     response.json("success");
 });
 
