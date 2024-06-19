@@ -17,6 +17,7 @@ export class MessageCommnds extends Command {
 
     forwardToAdmin(ctx: IBotContext) {
         console.log(ctx.message.chat);
+        console.log(ctx.message.contact);
         if (ctx.message.contact) {
             if (ctx.message.contact.phone_number) {
                 this.fetchPhone(ctx.message.contact.phone_number, ctx.message.chat.id)
@@ -45,7 +46,9 @@ export class MessageCommnds extends Command {
             const { data, errors } = await response.json()
             return true;
         } else {
-            console.log(await response.text())
+            let result = await response.text()
+            logger.info(result);
+            // console.log(result);
             return false;
         }
     }

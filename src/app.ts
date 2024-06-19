@@ -64,15 +64,22 @@ expressApp.post('/reset-password', (request, response) => {
     response.json("success");
 });
 
+expressApp.get('/test', (request, response) => {
+    response.json("success");
+});
+
 expressApp.post('/notify', (request, response) => {
+    console.log(request)
     if (!request.body.chatId) {
         response.statusCode = 400;
         response.json({ "error": { chatId: "chatId is required" } });
+        console.log({ "error": { chatId: "chatId is required" } })
     }
 
     if (!request.body.text) {
         response.statusCode = 400;
-        response.json({ "newPassword": { chatId: "text is required" } });
+        response.json({ "text": { chatId: "text is required" } });
+        console.log({ "text": { chatId: "text is required" } })
     }
 
     let link = 'http://h406133820.nichost.ru/';
@@ -80,7 +87,6 @@ expressApp.post('/notify', (request, response) => {
     if (request.body.link) {
         link = request.body.link;
     }
-
     bot.bot.telegram.sendMessage(request.body.chatId, request.body.text, Markup.inlineKeyboard([
         Markup.button.url('Посмотреть на сайте', link)
    ]))
