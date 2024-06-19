@@ -45,7 +45,7 @@ const bot = new Bot(configServise);
 const adminService = AdminService.getInstance();
 
 const expressApp = express();
-const port = 5000;
+const port = 80;
 expressApp.use(express.json())
 expressApp.post('/reset-password', (request, response) => {
     if (!request.body.chatId) {
