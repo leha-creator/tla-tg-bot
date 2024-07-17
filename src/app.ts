@@ -95,7 +95,7 @@ expressApp.post('/notify', (request, response) => {
     response.json("success");
 });
 
-expressApp.post('/admin-notify', (request, response) => {
+expressApp.post('/notify-admin', (request, response) => {
     if (!request.body.text) {
         response.statusCode = 400;
         response.json({ "text": { chatId: "text is required" } });
