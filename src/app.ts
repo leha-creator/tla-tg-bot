@@ -13,7 +13,6 @@ import { ModCommnds } from "./commands/mod.command";
 import { UnmodCommnds } from "./commands/unmod.command";
 import express from "express";
 
-
 class Bot {
     bot: Telegraf<IBotContext>;
     commands: Command[] = [];
@@ -96,11 +95,26 @@ expressApp.post('/notify', (request, response) => {
     response.json("success");
 });
 
+expressApp.post('/admin-notify', (request, response) => {
+    if (!request.body.text) {
+        response.statusCode = 400;
+        response.json({ "text": { chatId: "text is required" } });
+        console.log({ "text": { chatId: "text is required" } })
+    }
+    const adminService = AdminService.getInstance();
+    const admins = adminService.getAdmins();
+    admins.forEach(id => {
+        bot.bot.telegram.sendMessage(id, request.body.text);
+    });
+
+    response.statusCode = 200;
+    response.json("success");
+});
+
 const start = async () => {
     bot.init();
     logger.info('app started');
     expressApp.listen(port, () => console.log(`Running on port ${port}`));
-
 };
 
 start();
