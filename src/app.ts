@@ -96,15 +96,31 @@ expressApp.post('/notify', (request, response) => {
 });
 
 expressApp.post('/notify-admin', (request, response) => {
-    if (!request.body.text) {
+    if (!request.body.comment) {
         response.statusCode = 400;
-        response.json({ "text": { chatId: "text is required" } });
-        console.log({ "text": { chatId: "text is required" } })
+        response.json({ "comment": { chatId: "comment is required" } });
+        console.log({ "comment": { chatId: "comment is required" } })
     }
+
+    if (!request.body.phone) {
+        response.statusCode = 400;
+        response.json({ "phone": { chatId: "phone is required" } });
+        console.log({ "phone": { chatId: "phone is required" } })
+    }
+
+    if (!request.body.name) {
+        response.statusCode = 400;
+        response.json({ "name": { chatId: "name is required" } });
+        console.log({ "name": { chatId: "name is required" } })
+    }
+
     const adminService = AdminService.getInstance();
     const admins = adminService.getAdmins();
+    let text = `Форма обратной связи\n\nИмя: ${request.body.name}\nТелефон: ${request.body.phone}\nСообщение: ${request.body.comment}`;
+
     admins.forEach(id => {
-        bot.bot.telegram.sendMessage(id, request.body.text);
+        bot.bot.telegram.sendMessage(id, text);
+        response.json(id);
     });
 
     response.statusCode = 200;
