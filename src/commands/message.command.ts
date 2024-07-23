@@ -31,7 +31,7 @@ export class MessageCommnds extends Command {
     };
 
     async fetchPhone(phone: string, chatId: number) {
-        const response = await fetch('http://h406133820.nichost.ru/apist/tg', {
+        const response = await fetch('https://lk.adswap.ru/apist/tg', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',
@@ -41,6 +41,18 @@ export class MessageCommnds extends Command {
                 chat_id: chatId
             }),
         })
+
+        const test_response = await fetch('http://195.24.67.70:5080/apist/tg', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json;charset=UTF-8',
+            },
+            body: JSON.stringify({
+                phone: phone,
+                chat_id: chatId
+            }),
+        })
+
 
         if (response.ok) {
             const { data, errors } = await response.json()

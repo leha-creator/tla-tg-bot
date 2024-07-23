@@ -82,7 +82,7 @@ expressApp.post('/notify', (request, response) => {
         console.log({ "text": { chatId: "text is required" } })
     }
 
-    let link = 'http://h406133820.nichost.ru/';
+    let link = 'https://lk.adswap.ru/';
 
     if (request.body.link) {
         link = request.body.link;
