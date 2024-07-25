@@ -46,6 +46,7 @@ export class MessageCommnds extends Command {
             method: 'POST',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',
+                'Authorization': 'Basic ' + Buffer.from("admin:mV0OJ5@IeX|E").toString('base64')
             },
             body: JSON.stringify({
                 phone: phone,
