@@ -20,20 +20,21 @@ interface IUser {
     role: string | null,
     password: string | null
     socials: ISocial[],
+    platforms: ISocial[],
 }
 
 const socials = [
-    'youtube',
-    'vk',
-    'telegram',
-    'inst'
+    'Youtube',
+    'VK',
+    'Telegram',
+    'Instagram'
 ]
 
 const social_names = {
-    youtube: 'Ютуб',
-    vk: 'Вконтакте',
-    telegram: 'Телеграм',
-    inst: 'Инстаграм',
+    Youtube: 'Ютуб',
+    VK: 'Вконтакте',
+    Telegram: 'Телеграм',
+    Instagram: 'Инстаграм',
 }
 
 export const registerScene = composeWizardScene(
@@ -241,6 +242,7 @@ async function storePhone(phone: string, chatId: number) {
 async function storeUser(user: IUser) {
     const domain = getDomain();
     user.password = generateRandomString(16);
+    user.platforms = user.socials;
     console.log(user);
     const response = await fetch(domain + '/api/users', {
         method: 'POST',

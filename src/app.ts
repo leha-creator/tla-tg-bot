@@ -51,26 +51,26 @@ class Bot {
             return ctx.wizard.steps[ctx.wizard.cursor](ctx);
         });
 
-        register.action('youtube', (ctx) => {
-            ctx.wizard.state.selected_social = 'youtube';
+        register.action('Youtube', (ctx) => {
+            ctx.wizard.state.selected_social = 'Youtube';
             ctx.wizard.cursor = 5;
             return ctx.wizard.steps[5](ctx);
         });
 
-        register.action('vk', (ctx) => {
-            ctx.wizard.state.selected_social = 'vk';
+        register.action('VK', (ctx) => {
+            ctx.wizard.state.selected_social = 'VK';
             ctx.wizard.cursor = 5;
             return ctx.wizard.steps[5](ctx);
         });
 
-        register.action('telegram', (ctx) => {
-            ctx.wizard.state.selected_social = 'telegram';
+        register.action('Telegram', (ctx) => {
+            ctx.wizard.state.selected_social = 'Telegram';
             ctx.wizard.cursor = 5;
             return ctx.wizard.steps[5](ctx);
         });
 
-        register.action('inst', (ctx) => {
-            ctx.wizard.state.selected_social = 'inst';
+        register.action('Instagram', (ctx) => {
+            ctx.wizard.state.selected_social = 'Instagram';
             ctx.wizard.cursor = 5;
             return ctx.wizard.steps[5](ctx);
         });
