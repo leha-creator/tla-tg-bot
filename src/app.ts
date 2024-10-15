@@ -100,6 +100,10 @@ class Bot {
             new UnmodCommnds(this.bot, adminService),
         ];
 
+        this.bot.action('enter_register', (ctx) => {
+            ctx.scene.enter('register', {});
+        });
+
         for (const command of this.commands) {
             command.handle();
         }
