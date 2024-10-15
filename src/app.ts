@@ -113,7 +113,7 @@ const bot = new Bot(configService);
 const adminService = AdminService.getInstance();
 
 const expressApp = express();
-const port = 80;
+const port = configService.get('EXPRESS_PORT');
 expressApp.use(express.json());
 
 expressApp.post('/reset-password', (request, response) => {

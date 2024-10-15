@@ -202,12 +202,14 @@ export const registerScene = composeWizardScene(
         const user = await storeUser(ctx.wizard.state.user_data);
         if (user) {
             const new_phone = ctx.wizard.state.user_data.phone.replace("+", "\\+");
-
+            const domain = getDomain();
             ctx.reply(`Ваш профиль был успешно создан на нашем сервисе lk\\.adswap\\.ru\\. Для входа в систему используйте следующие учетные данные: \n\nТелефон: \`${new_phone}\`\nПароль: \`${user.password}\``, {
                 parse_mode: 'MarkdownV2',
-                reply_markup: Markup.inlineKeyboard([
-                    Markup.button.url('Перейти на сайт', 'https://lk.adswap.ru?token' + user.token)
-                ])
+                reply_markup: {
+                    inline_keyboard: [
+                        [ { text: "Перейти на сайт", url:  domain + '?token=' + user.token } ],
+                    ]
+                }
             });
         } else {
             ctx.reply(`Произошла ошибка при регистрации попробуйте ещё раз позже или обратитесь в службу поддержки`);
