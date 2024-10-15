@@ -1,8 +1,9 @@
 import { config, DotenvParseOutput } from "dotenv";
 import { IConfigServise } from "./config.interface";
 
-export class ConfigServise implements IConfigServise {
-    private config: DotenvParseOutput;
+export class ConfigService implements IConfigServise {
+    private static instance: ConfigService;
+    private readonly config: DotenvParseOutput;
 
     constructor() {
         const { error, parsed } = config();
@@ -15,6 +16,16 @@ export class ConfigServise implements IConfigServise {
 
         this.config = parsed;
     }
+
+    static getInstance() {
+        if (this.instance) {
+            return this.instance;
+        }
+
+        this.instance = new ConfigService();
+        return this.instance;
+    }
+
 
     get(key: string): string {
         const res = this.config[key];

@@ -1,7 +1,7 @@
-import { Markup, Telegraf } from "telegraf";
-import { Command } from "./command.class";
-import { IBotContext } from "../context/context.interface";
-import { AdminService } from "../helpers/admin.service";
+import {Telegraf} from "telegraf";
+import {Command} from "./command.class";
+import {IBotContext} from "../context/context.interface";
+import {AdminService} from "../helpers/admin.service";
 
 export class StartCommnds extends Command {
     constructor(bot: Telegraf<IBotContext>, public adminService: AdminService) {
@@ -10,19 +10,7 @@ export class StartCommnds extends Command {
 
     handle(): void {
         this.bot.start((ctx) => {
-            ctx.reply("Подтвердите регистрацию", {
-                reply_markup: {
-                  keyboard: [
-                    [
-                      {
-                        text: "Подтвердить регистрацию",
-                        request_contact: true,
-                      },
-                    ],
-                  ],
-                  one_time_keyboard: true,
-                },
-              })
+            ctx.scene.enter('register', {});
         });
     }
 }

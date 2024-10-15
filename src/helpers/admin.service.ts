@@ -3,12 +3,12 @@ import { logger } from './logger';
 
 export class AdminService {
     private static instance: AdminService;
-    private admins: number[] = [];
+    private readonly admins: number[] = [];
     private path = 'admin.json';
 
     private constructor() {
         try {
-            let adminsFile = fs.readFileSync(this.path, 'utf8');
+            const adminsFile = fs.readFileSync(this.path, 'utf8');
             this.admins = JSON.parse(adminsFile);
         } catch (e) {
             console.log('Error reading file:', e);
@@ -33,18 +33,18 @@ export class AdminService {
         if (this.admins.includes(id)) return;
 
         this.admins.push(id);
-        let adminsJson = JSON.stringify(this.admins);
+        const adminsJson = JSON.stringify(this.admins);
 
         this.saveJson(adminsJson);
     }
 
     deleteAdmin(id: number) {
-        let index = this.admins.indexOf(id);
+        const index = this.admins.indexOf(id);
         if (index !== -1) {
             this.admins.splice(index, 1);
         }
 
-        let adminsJson = JSON.stringify(this.admins);
+        const adminsJson = JSON.stringify(this.admins);
         this.saveJson(adminsJson);
     }
 
