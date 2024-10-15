@@ -218,7 +218,7 @@ export const registerScene = composeWizardScene(
 
 async function storePhone(phone: string, chatId: number) {
     const domain = getDomain();
-    const response = await fetch(domain + '/apist/tg', {
+    const response = await fetch(domain + '/api/phones', {
         method: 'POST',
         headers: {
             'content-type': 'application/json;charset=UTF-8',
