@@ -1,7 +1,6 @@
 import {composeWizardScene} from "../helpers/scene.servise";
 import {logger} from "../helpers/logger";
 import {getDomain} from "../helpers/domain.service";
-import {Markup} from "telegraf";
 
 interface ISocial {
     name: string,
@@ -204,19 +203,18 @@ export const registerScene = composeWizardScene(
             const new_phone = ctx.wizard.state.user_data.phone.replace("+", "\\+");
             const domain = getDomain();
             ctx.reply(`🔑 Данные для доступа к сервису
+            
 Ссылка для входа: https://lk\\.adswap\\.ru/
 Логин: \`${new_phone}\`
 Пароль: \`${user.password}\`
 
-
 Авторизуйтесь в сервисе и посмотрите раздел [инструкции](https://adswap.ru/instructions)\\.
-
-
 Если у вас остались вопросы, напишите нам в чат поддержки по [ссылке](@adswap_admin)\\.`, {
                 parse_mode: 'MarkdownV2',
+                disable_web_page_preview: true,
                 reply_markup: {
                     inline_keyboard: [
-                        [ { text: "Перейти на сайт", url:  domain + '?token=' + user.token } ],
+                        [{text: "Перейти на сайт", url: domain + '?token=' + user.token}],
                     ]
                 }
             });
@@ -265,7 +263,7 @@ async function storeUser(user: IUser) {
 
     if (response.ok) {
         const parsed_response = await response.json()
-        return { password: user.password,  token: parsed_response.token};
+        return {password: user.password, token: parsed_response.token};
     } else {
         const result = await response.text()
         logger.info(result);
@@ -283,11 +281,11 @@ function isEmailValid(value: string) {
 }
 
 const isValidUrl = (str) => {
-    try {
-        // Даже URL-адреса нуждаются в проверке
-        return !!new URL(str);
-    } catch (_) {
-        // Если URL оказался некорректным
-        return false;
-    }
+    const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+    return pattern.test(str);
 };
