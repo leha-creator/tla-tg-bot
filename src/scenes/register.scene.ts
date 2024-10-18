@@ -78,6 +78,9 @@ export const registerScene = composeWizardScene(
                     return ctx.scene.leave();
                 }
             }
+        } else {
+            ctx.wizard.cursor = ctx.wizard.cursor - 1;
+            return ctx.wizard.steps[ctx.wizard.cursor](ctx);
         }
 
         ctx.reply('Спасибо, теперь напишите свое имя');
@@ -198,7 +201,7 @@ export const registerScene = composeWizardScene(
     },
 
     async (ctx, done: () => any) => {
-        const user = await storeUser(ctx.wizard.state.user_data);
+        const user = await storeUser(ctx.wizard.state.user_data, ctx);
         if (user) {
             const new_phone = ctx.wizard.state.user_data.phone.replace("+", "\\+");
             const domain = getDomain();
@@ -248,7 +251,7 @@ async function storePhone(phone: string, chatId: number) {
     }
 }
 
-async function storeUser(user: IUser) {
+async function storeUser(user: IUser, ctx: any) {
     const domain = getDomain();
     user.password = generateRandomString(16);
     user.platforms = user.socials;
