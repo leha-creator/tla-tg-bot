@@ -203,7 +203,7 @@ export const registerScene = composeWizardScene(
     async (ctx, done: () => any) => {
         const user = await storeUser(ctx.wizard.state.user_data, ctx);
         if (user) {
-            ctx.reply(`Спасибо\\! Ваш аккаунт находится в модерации. После вашего одобрения мы отправим вам данные для входа`, {
+            ctx.reply(`Спасибо\\! Ваш аккаунт находится в модерации\\. После вашего одобрения мы отправим вам данные для входа`, {
                 parse_mode: 'MarkdownV2',
             });
         } else {
