@@ -203,23 +203,8 @@ export const registerScene = composeWizardScene(
     async (ctx, done: () => any) => {
         const user = await storeUser(ctx.wizard.state.user_data, ctx);
         if (user) {
-            const new_phone = ctx.wizard.state.user_data.phone.replace("+", "\\+");
-            const domain = getDomain();
-            ctx.reply(`🔑 Данные для доступа к сервису
-            
-Ссылка для входа: https://lk\\.adswap\\.ru/
-Логин: \`${new_phone}\`
-Пароль: \`${user.password}\`
-
-Авторизуйтесь в сервисе и посмотрите раздел [инструкции](https://adswap.ru/instructions)\\.
-Если у вас остались вопросы, напишите нам в чат поддержки по [ссылке](@adswap_admin)\\.`, {
+            ctx.reply(`Спасибо\\! Ваш аккаунт находится в модерации. После вашего одобрения мы отправим вам данные для входа`, {
                 parse_mode: 'MarkdownV2',
-                disable_web_page_preview: true,
-                reply_markup: {
-                    inline_keyboard: [
-                        [{text: "Перейти на сайт", url: domain + '?token=' + user.token}],
-                    ]
-                }
             });
         } else {
             ctx.reply(`Произошла ошибка при регистрации попробуйте ещё раз позже или обратитесь в службу поддержки`);
