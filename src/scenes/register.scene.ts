@@ -68,11 +68,10 @@ export const registerScene = composeWizardScene(
         return ctx.wizard.next();
     },
     async (ctx) => {
-        if (ctx.message.contact) {
+        if (typeof ctx.message.contact !== 'undefined') {
             if (ctx.message.contact.phone_number) {
                 ctx.wizard.state.user_data.phone = ctx.message.contact.phone_number;
                 const res = await storePhone(ctx.message.contact.phone_number, ctx.message.chat.id);
-                console.log(res);
                 if (!res) {
                     ctx.reply('Пользователь с таким номером уже зарегистрирован.');
                     return ctx.scene.leave();
