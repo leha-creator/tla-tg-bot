@@ -68,10 +68,12 @@ export const registerScene = composeWizardScene(
         return ctx.wizard.next();
     },
     async (ctx) => {
+        console.log(ctx.message.contact);
+        console.log(ctx.message);
         if (typeof ctx.message.contact !== 'undefined') {
             if (ctx.message.contact.phone_number) {
                 ctx.wizard.state.user_data.phone = ctx.message.contact.phone_number;
-                const res = await storePhone(ctx.message.contact.phone_number, ctx.message.chat.id);
+                const res = await storePhone(ctx.message.contact.phone_number, ctx.message.chat.id, ctx.message.from.username);
                 if (!res) {
                     ctx.reply('Пользователь с таким номером уже зарегистрирован.');
                     return ctx.scene.leave();
@@ -234,7 +236,7 @@ export const registerScene = composeWizardScene(
     },
 );
 
-async function storePhone(phone: string, chatId: number) {
+async function storePhone(phone: string, chatId: number, username: string) {
     const domain = getDomain();
     const response = await fetch(domain + '/api/phones', {
         method: 'POST',
@@ -243,6 +245,7 @@ async function storePhone(phone: string, chatId: number) {
         },
         body: JSON.stringify({
             phone: phone,
+            username: username,
             chat_id: chatId
         }),
     })
