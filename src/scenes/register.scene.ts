@@ -68,8 +68,6 @@ export const registerScene = composeWizardScene(
         return ctx.wizard.next();
     },
     async (ctx) => {
-        console.log(ctx.message.contact);
-        console.log(ctx.message);
         if (typeof ctx.message.contact !== 'undefined') {
             if (ctx.message.contact.phone_number) {
                 ctx.wizard.state.user_data.phone = ctx.message.contact.phone_number;
@@ -183,7 +181,6 @@ export const registerScene = composeWizardScene(
                     name: ctx.wizard.state.selected_social,
                     link: ctx.message.text
                 })
-                console.log(ctx.wizard.state.user_data.socials);
                 ctx.reply(`Ваш блог в ${social_names[ctx.wizard.state.selected_social]} успешно добавлен! Хотите указать ещё один блог?(Да/нет):`, {
                     reply_markup: {
                         inline_keyboard: [
@@ -202,7 +199,7 @@ export const registerScene = composeWizardScene(
     },
 
     async (ctx, done: () => any) => {
-        const user = await storeUser(ctx.wizard.state.user_data, ctx);
+        const user = await storeUser(ctx.wizard.state.user_data);
         if (user) {
             if (ctx.wizard.state.user_data.role === 'blogger') {
                 ctx.reply(`Спасибо\\! Ваш аккаунт находится в модерации\\. После вашего одобрения мы отправим вам данные для входа`, {
@@ -259,11 +256,10 @@ async function storePhone(phone: string, chatId: number, username: string) {
     }
 }
 
-async function storeUser(user: IUser, ctx: any) {
+async function storeUser(user: IUser) {
     const domain = getDomain();
     user.password = generateRandomString(16);
     user.platforms = user.socials;
-    console.log(user);
     const response = await fetch(domain + '/api/users', {
         method: 'POST',
         headers: {
