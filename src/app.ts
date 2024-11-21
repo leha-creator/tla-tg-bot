@@ -36,7 +36,6 @@ class Bot {
         });
 
         register.action('seller', (ctx) => {
-            console.log(ctx);
             ctx.wizard.state.user_data.role = 'seller';
             return ctx.wizard.steps[ctx.wizard.cursor](ctx);
         });
@@ -143,7 +142,6 @@ expressApp.get('/test', (request, response) => {
 });
 
 expressApp.post('/notify', (request, response) => {
-    console.log(request)
     if (!request.body.chatId) {
         response.statusCode = 400;
         response.json({"error": {chatId: "chatId is required"}});
