@@ -68,7 +68,7 @@ export const registerScene = composeWizardScene(
         return ctx.wizard.next();
     },
     async (ctx) => {
-        if (typeof ctx.message.contact !== 'undefined') {
+        if (typeof ctx.message !== 'undefined' && typeof ctx.message.contact !== 'undefined') {
             if (ctx.message.contact.phone_number) {
                 ctx.wizard.state.user_data.phone = ctx.message.contact.phone_number;
                 const res = await storePhone(ctx.message.contact.phone_number, ctx.message.chat.id, ctx.message.from.username);
