@@ -2,6 +2,7 @@ import {Telegraf} from "telegraf";
 import {Command} from "./command.class";
 import {IBotContext} from "../context/context.interface";
 import {AdminService} from "../helpers/admin.service";
+import {logger} from "../helpers/logger";
 
 export class StartCommnds extends Command {
     constructor(bot: Telegraf<IBotContext>, public adminService: AdminService) {
@@ -9,8 +10,9 @@ export class StartCommnds extends Command {
     }
 
     handle(): void {
-        this.bot.start((ctx: any) => {
-            ctx.reply(`Привет\\! 👋
+        try {
+            this.bot.start((ctx: any) => {
+                ctx.reply(`Привет\\! 👋
 
 Это бот для регистрации в Adswap: платформе бартерной рекламы для селлеров и блогеров 🚀
 
@@ -34,14 +36,17 @@ export class StartCommnds extends Command {
 
 Регистрируясь на платформе, вы даете согласие на обработку персональных данных, а также подтверждаете ознакомление с [пользовательским соглашением](https://adswap.ru/privacy) и [политикой конфиденциальности](https://adswap.ru/agreement)\\.
 `, {
-                reply_markup: {
-                    inline_keyboard: [
-                        [{text: "Зарегистрироваться", callback_data: "enter_register"}],
-                    ],
-                },
-                parse_mode: 'MarkdownV2',
-                disable_web_page_preview: true,
+                    reply_markup: {
+                        inline_keyboard: [
+                            [{text: "Зарегистрироваться", callback_data: "enter_register"}],
+                        ],
+                    },
+                    parse_mode: 'MarkdownV2',
+                    disable_web_page_preview: true,
+                });
             });
-        });
+        } catch (e: any) {
+            logger.info(e.message);
+        }
     }
 }
