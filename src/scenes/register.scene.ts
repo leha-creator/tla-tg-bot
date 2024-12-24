@@ -26,7 +26,11 @@ const socials = [
     'Youtube',
     'VK',
     'Telegram',
-    'Instagram'
+    'Instagram',
+    'OK',
+    'Dzen',
+    'Rutube',
+    'Yappy',
 ]
 
 const social_names = {
@@ -34,6 +38,10 @@ const social_names = {
     VK: 'Вконтакте',
     Telegram: 'Телеграм',
     Instagram: 'Инстаграм',
+    OK: 'Одноклассники',
+    Dzen: 'Дзен',
+    Rutube: 'Rutube',
+    Yappy: 'Yappy',
 }
 
 export const registerScene = composeWizardScene(
