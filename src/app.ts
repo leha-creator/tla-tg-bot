@@ -98,6 +98,12 @@ class Bot {
             return ctx.wizard.steps[5](ctx);
         });
 
+        register.action('Tiktok', (ctx) => {
+            ctx.wizard.state.selected_social = 'Yappy';
+            ctx.wizard.cursor = 5;
+            return ctx.wizard.steps[5](ctx);
+        });
+
         register.action('add_social', (ctx) => {
             ctx.wizard.cursor = 4;
             return ctx.wizard.steps[4](ctx);
