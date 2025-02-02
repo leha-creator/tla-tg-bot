@@ -74,6 +74,30 @@ class Bot {
             return ctx.wizard.steps[5](ctx);
         });
 
+        register.action('OK', (ctx) => {
+            ctx.wizard.state.selected_social = 'OK';
+            ctx.wizard.cursor = 5;
+            return ctx.wizard.steps[5](ctx);
+        });
+
+        register.action('Dzen', (ctx) => {
+            ctx.wizard.state.selected_social = 'Dzen';
+            ctx.wizard.cursor = 5;
+            return ctx.wizard.steps[5](ctx);
+        });
+
+        register.action('Rutube', (ctx) => {
+            ctx.wizard.state.selected_social = 'Rutube';
+            ctx.wizard.cursor = 5;
+            return ctx.wizard.steps[5](ctx);
+        });
+
+        register.action('Yappy', (ctx) => {
+            ctx.wizard.state.selected_social = 'Yappy';
+            ctx.wizard.cursor = 5;
+            return ctx.wizard.steps[5](ctx);
+        });
+
         register.action('add_social', (ctx) => {
             ctx.wizard.cursor = 4;
             return ctx.wizard.steps[4](ctx);

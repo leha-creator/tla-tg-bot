@@ -31,6 +31,7 @@ const socials = [
     'Dzen',
     'Rutube',
     'Yappy',
+    'Tiktok',
 ]
 
 const social_names = {
@@ -42,6 +43,7 @@ const social_names = {
     Dzen: 'Дзен',
     Rutube: 'Rutube',
     Yappy: 'Yappy',
+    Tiktok: 'Tiktok',
 }
 
 export const registerScene = composeWizardScene(
