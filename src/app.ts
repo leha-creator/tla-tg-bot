@@ -99,7 +99,7 @@ class Bot {
         });
 
         register.action('Tiktok', (ctx) => {
-            ctx.wizard.state.selected_social = 'Yappy';
+            ctx.wizard.state.selected_social = 'Tiktok';
             ctx.wizard.cursor = 5;
             return ctx.wizard.steps[5](ctx);
         });
