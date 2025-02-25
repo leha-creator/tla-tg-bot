@@ -52,6 +52,7 @@ export const registerScene = composeWizardScene(
         ctx.wizard.state.selected_social_link = null;
         ctx.wizard.state.email_error = false;
         ctx.wizard.state.link_error = false;
+        ctx.wizard.state.name_error = false;
         ctx.wizard.state.user_data = {
             name: null,
             email: null,
@@ -78,6 +79,11 @@ export const registerScene = composeWizardScene(
         return ctx.wizard.next();
     },
     async (ctx) => {
+        if (ctx.wizard.state.name_error) {
+            ctx.reply('Проверьте правильность ввода имени');
+            return ctx.wizard.next();
+        }
+
         if (typeof ctx.message !== 'undefined' && typeof ctx.message.contact !== 'undefined' && typeof ctx.message.contact.phone_number !== 'undefined') {
             ctx.wizard.state.user_data.phone = ctx.message.contact.phone_number;
             if (!await checkUserExist(ctx.message.contact.phone_number)) {
@@ -95,13 +101,21 @@ export const registerScene = composeWizardScene(
         return ctx.wizard.next();
     },
     (ctx) => {
-        ctx.wizard.state.user_data.name = ctx.message.text;
         if (ctx.wizard.state.email_error) {
             ctx.reply('Проверьте правильность ввода email');
-        } else {
-            ctx.reply('Спасибо, теперь напишите свой email');
+            return ctx.wizard.next();
         }
 
+        if (ctx.message !== undefined && ctx.message.text !== undefined) {
+            ctx.wizard.state.user_data.name = ctx.message.text;
+        } else {
+            ctx.wizard.state.name_error = true;
+            ctx.wizard.cursor = ctx.wizard.cursor - 1;
+            return ctx.wizard.steps[ctx.wizard.cursor](ctx);
+        }
+
+        ctx.wizard.state.name_error = false;
+        ctx.reply('Спасибо, теперь напишите свой email');
         return ctx.wizard.next();
     },
     (ctx) => {
