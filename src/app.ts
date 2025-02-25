@@ -133,6 +133,11 @@ class Bot {
             ctx.scene.enter('register', {});
         });
 
+        this.bot.action('restart', (ctx) => {
+            ctx.scene.enter('register', {});
+        });
+
+
         for (const command of this.commands) {
             command.handle();
         }

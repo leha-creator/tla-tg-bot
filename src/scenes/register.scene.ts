@@ -78,14 +78,13 @@ export const registerScene = composeWizardScene(
         return ctx.wizard.next();
     },
     async (ctx) => {
-        if (typeof ctx.message !== 'undefined' && typeof ctx.message.contact !== 'undefined') {
-            if (ctx.message.contact.phone_number) {
-                ctx.wizard.state.user_data.phone = ctx.message.contact.phone_number;
-                const res = await storePhone(ctx.message.contact.phone_number, ctx.message.chat.id, ctx.message.from.username);
-                if (!res) {
-                    ctx.reply('Пользователь с таким номером уже зарегистрирован.');
-                    return ctx.scene.leave();
-                }
+        if (typeof ctx.message !== 'undefined' && typeof ctx.message.contact !== 'undefined' && typeof ctx.message.contact.phone_number !== 'undefined') {
+            ctx.wizard.state.user_data.phone = ctx.message.contact.phone_number;
+            if (!await checkUserExist(ctx.message.contact.phone_number)) {
+                await storePhone(ctx.message.contact.phone_number, ctx.message.chat.id, ctx.message.from.username);
+            } else {
+                ctx.reply('Пользователь с таким номером уже зарегистрирован.');
+                return ctx.scene.leave();
             }
         } else {
             ctx.wizard.cursor = ctx.wizard.cursor - 1;
@@ -162,7 +161,7 @@ export const registerScene = composeWizardScene(
     },
     (ctx) => {
         if (ctx.wizard.state.user_data.role === 'blogger') {
-            if (typeof ctx.update !== 'undefined') {
+            if (typeof ctx.update !== 'undefined' && socials.includes(ctx.wizard.state.selected_social)) {
                 if (ctx.wizard.state.link_error) {
                     ctx.reply(`Проверьте правильность ввода ссылки`);
                 } else {
@@ -229,19 +228,41 @@ export const registerScene = composeWizardScene(
                     parse_mode: 'MarkdownV2',
                     reply_markup: {
                         inline_keyboard: [
-                            [ { text: "Перейти на сайт", url:  domain + '?token=' + user.token } ],
+                            [{text: "Перейти на сайт", url: domain + '?token=' + user.token}],
                         ]
                     }
                 });
             }
         } else {
-            ctx.reply(`Произошла ошибка при регистрации попробуйте ещё раз позже или обратитесь в службу поддержки`);
+            ctx.reply(`Произошла ошибка при регистрации попробуйте ещё раз позже или обратитесь в службу поддержки`, {
+                reply_markup: {
+                    inline_keyboard: [
+                        [{
+                            text: 'Попробовать ещё раз',
+                            callback_data: 'restart',
+                        }],
+                    ]
+                }
+            });
         }
 
         ctx.wizard.next()
+        ctx.scene.leave();
         return done();
     },
 );
+
+async function checkUserExist(phone: string) {
+    const domain = getDomain();
+    const response = await fetch(domain + '/api/users/exist?phone=' + phone, {
+        method: 'GET',
+        headers: {
+            'content-type': 'application/json;charset=UTF-8',
+        },
+    })
+
+    return response.ok;
+}
 
 async function storePhone(phone: string, chatId: number, username: string) {
     const domain = getDomain();
