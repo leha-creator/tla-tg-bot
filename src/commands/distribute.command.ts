@@ -26,7 +26,7 @@ export class DistributeCommand extends Command {
             }
 
             const domain = getDomain();
-            const response = await fetch(domain + '/distribute', {
+            const response = await fetch(domain + '/api/distribute', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json;charset=UTF-8',
