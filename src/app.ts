@@ -14,6 +14,7 @@ import express from "express";
 import {Stage} from "telegraf/scenes";
 import {registerScene} from "./scenes/register.scene";
 import {RegisterCommand} from "./commands/register.command";
+import {DistributeCommand} from "./commands/distribute.command";
 
 class Bot {
     bot: Telegraf<IBotContext>;
@@ -127,6 +128,7 @@ class Bot {
             new ListCommnds(this.bot, adminService),
             new ModCommnds(this.bot, adminService),
             new UnmodCommnds(this.bot, adminService),
+            new DistributeCommand(this.bot, adminService)
         ];
 
         this.bot.action('enter_register', (ctx) => {
@@ -136,7 +138,6 @@ class Bot {
         this.bot.action('restart', (ctx) => {
             ctx.scene.enter('register', {});
         });
-
 
         for (const command of this.commands) {
             command.handle();

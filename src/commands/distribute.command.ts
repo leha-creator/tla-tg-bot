@@ -5,13 +5,13 @@ import { AdminService } from "../helpers/admin.service";
 import {getDomain} from "../helpers/domain.service";
 import {logger} from "../helpers/logger";
 
-export class ListCommnds extends Command {
+export class DistributeCommand extends Command {
     constructor(bot: Telegraf<IBotContext>, public adminService: AdminService) {
         super(bot);
     }
 
     handle(): void {
-        this.bot.command('list', async (ctx) => {
+        this.bot.command('distribute', async (ctx) => {
             if (!this.adminService.isAdmin(ctx.message.from.id)) {
                 return ctx.reply(`Недостаточно прав`);
             }
