@@ -15,7 +15,7 @@ export class ListCommnds extends Command {
                 return;
             }
 
-            let adminsList = this.adminService.getAdmins();
+            const adminsList = this.adminService.getAdmins();
             let adminsString = '';
             adminsList.forEach((admin, key) => {
                 adminsString += `${key}. ${admin}\n`;
