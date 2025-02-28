@@ -10,8 +10,10 @@ export class StartCommnds extends Command {
     }
 
     handle(): void {
-            this.bot.start((ctx: any) => {
-                try {
+        this.bot.start((ctx: any) => {
+            const parameters = ctx.update.message.text.split(' ');
+            ctx.session.ref_code = parameters[1] ?? 0;
+            try {
                 ctx.reply(`Привет\\! 👋
 
 Это бот для регистрации в Adswap: платформе бартерной рекламы для селлеров и блогеров 🚀
@@ -44,9 +46,9 @@ export class StartCommnds extends Command {
                     parse_mode: 'MarkdownV2',
                     disable_web_page_preview: true,
                 });
-                } catch (e: any) {
-                    logger.info(e.message);
-                }
-            });
+            } catch (e: any) {
+                logger.info(e.message);
+            }
+        });
     }
 }

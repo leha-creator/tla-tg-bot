@@ -13,13 +13,14 @@ interface IKeyboardElement {
 }
 
 interface IUser {
-    name: string | null,
-    phone: string | null,
-    email: string | null,
-    role: string | null,
-    password: string | null
+    name: string|null,
+    phone: string|null,
+    email: string|null,
+    role: string|null,
+    password: string|null
     socials: ISocial[],
     platforms: ISocial[],
+    ref_code: string|null
 }
 
 const socials = [
@@ -60,7 +61,12 @@ export const registerScene = composeWizardScene(
             role: null,
             password: null,
             socials: [],
+            ref_code: [],
         };
+
+        if (ctx.session.ref_code !== undefined) {
+            ctx.wizard.state.user_data.ref_code = ctx.session.ref_code;
+        }
 
         ctx.reply("Для регистрации нажмите на кнопку \"📱Отправить телефон\" в меню бота", {
             reply_markup: {
