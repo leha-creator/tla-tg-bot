@@ -13,14 +13,14 @@ interface IKeyboardElement {
 }
 
 interface IUser {
-    name: string|null,
-    phone: string|null,
-    email: string|null,
-    role: string|null,
-    password: string|null
+    name: string,
+    phone: string | null,
+    email: string | null,
+    role: string | null,
+    password: string | null
     socials: ISocial[],
     platforms: ISocial[],
-    ref_code: string|null
+    ref_code: string | null
 }
 
 const socials = [
@@ -90,7 +90,7 @@ export const registerScene = composeWizardScene(
             return ctx.wizard.next();
         }
 
-        if (typeof ctx.message !== 'undefined' && typeof ctx.message.contact !== 'undefined' && typeof ctx.message.contact.phone_number !== 'undefined') {
+        if (ctx.message && ctx.message.contact && ctx.message.contact.phone_number) {
             ctx.wizard.state.user_data.phone = ctx.message.contact.phone_number;
             if (!await checkUserExist(ctx.message.contact.phone_number)) {
                 await storePhone(ctx.message.contact.phone_number, ctx.message.chat.id, ctx.message.from.username);
@@ -111,8 +111,7 @@ export const registerScene = composeWizardScene(
             ctx.reply('Проверьте правильность ввода email');
             return ctx.wizard.next();
         }
-
-        if (ctx.message !== undefined && ctx.message.text !== undefined) {
+        if (ctx.message && typeof ctx.message.text === "string" && ctx.message.text.length > 1 && ctx.message.text != 'null') {
             ctx.wizard.state.user_data.name = ctx.message.text;
         } else {
             ctx.wizard.state.name_error = true;
@@ -228,16 +227,17 @@ export const registerScene = composeWizardScene(
     },
 
     async (ctx, done: () => any) => {
-        const user = await storeUser(ctx.wizard.state.user_data);
-        if (user) {
-            if (ctx.wizard.state.user_data.role === 'blogger') {
-                ctx.reply(`Спасибо\\! Ваш аккаунт находится в модерации\\. После вашего одобрения мы отправим вам данные для входа`, {
-                    parse_mode: 'MarkdownV2',
-                });
-            } else {
-                const new_phone = ctx.wizard.state.user_data.phone.replace("+", "\\+");
-                const domain = getDomain();
-                ctx.reply(`🔑 Данные для доступа к сервису
+        try {
+            const user = await storeUser(ctx.wizard.state.user_data);
+            if (user) {
+                if (ctx.wizard.state.user_data.role === 'blogger') {
+                    ctx.reply(`Спасибо\\! Ваш аккаунт находится в модерации\\. После вашего одобрения мы отправим вам данные для входа`, {
+                        parse_mode: 'MarkdownV2',
+                    });
+                } else {
+                    const new_phone = ctx.wizard.state.user_data.phone.replace("+", "\\+");
+                    const domain = getDomain();
+                    ctx.reply(`🔑 Данные для доступа к сервису
 
 Ссылка для входа: https://lk\\.adswap\\.ru/
 Логин: \`${new_phone}\`
@@ -245,15 +245,28 @@ export const registerScene = composeWizardScene(
 
 Авторизуйтесь в сервисе и посмотрите раздел [инструкции](https://adswap.ru/instructions)\\.
 Если у вас остались вопросы, напишите нам в чат поддержки по [ссылке](https://t.me/adswap_admin)\\.`, {
-                    parse_mode: 'MarkdownV2',
+                        parse_mode: 'MarkdownV2',
+                        reply_markup: {
+                            inline_keyboard: [
+                                [{text: "Перейти на сайт", url: domain + '?token=' + user.token}],
+                            ]
+                        }
+                    });
+                }
+            } else {
+                ctx.reply(`Произошла ошибка при регистрации попробуйте ещё раз позже или обратитесь в службу поддержки`, {
                     reply_markup: {
                         inline_keyboard: [
-                            [{text: "Перейти на сайт", url: domain + '?token=' + user.token}],
+                            [{
+                                text: 'Попробовать ещё раз',
+                                callback_data: 'restart',
+                            }],
                         ]
                     }
                 });
             }
-        } else {
+        } catch (e: any) {
+            console.log(e.message);
             ctx.reply(`Произошла ошибка при регистрации попробуйте ещё раз позже или обратитесь в службу поддержки`, {
                 reply_markup: {
                     inline_keyboard: [
@@ -285,6 +298,7 @@ async function checkUserExist(phone: string) {
 }
 
 async function storePhone(phone: string, chatId: number, username: string) {
+    return true;
     const domain = getDomain();
     const response = await fetch(domain + '/api/phones', {
         method: 'POST',
@@ -308,6 +322,7 @@ async function storePhone(phone: string, chatId: number, username: string) {
 }
 
 async function storeUser(user: IUser) {
+    console.log(user);
     const domain = getDomain();
     user.password = generateRandomString(16);
     user.platforms = user.socials;
