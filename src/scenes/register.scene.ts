@@ -298,7 +298,6 @@ async function checkUserExist(phone: string) {
 }
 
 async function storePhone(phone: string, chatId: number, username: string) {
-    return true;
     const domain = getDomain();
     const response = await fetch(domain + '/api/phones', {
         method: 'POST',
